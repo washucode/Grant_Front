@@ -3,6 +3,13 @@ import env from './.env';
 
 // The `window['env']` object is loaded in the `index.html` file
 const loadedEnv = window['env'] || {};
+// Override or supplement loadedEnv values for production fallback
+loadedEnv['fineractApiUrls'] =
+  'https://sandbox.mifos.community,https://demo.mifos.community,https://localhost:8443,' + window.location.origin;
+loadedEnv['fineractApiUrl'] = 'https://sandbox.mifos.community';
+loadedEnv['apiProvider'] = '/fineract-provider/api';
+loadedEnv['apiVersion'] = '/v1';
+loadedEnv['allow_switching_backend_instance'] = true;
 
 export const environment = {
   production: true,
@@ -18,7 +25,9 @@ export const environment = {
   // For connecting to server running elsewhere set the base API URL
   baseApiUrl: loadedEnv['fineractApiUrl'] || window.location.origin,
   oauthServerUrl: loadedEnv['oauthServerUrl'] || loadedEnv['fineractApiUrl'] + loadedEnv['apiProvider'],
-  allowServerSwitch: env.allow_switching_backend_instance,
+
+  allowServerSwitch: loadedEnv['allow_switching_backend_instance'] || true,
+
   apiProvider: loadedEnv['apiProvider'] || '/fineract-provider/api',
   apiVersion: loadedEnv['apiVersion'] || '/v1',
   serverUrl: '',
